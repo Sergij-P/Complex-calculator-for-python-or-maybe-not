@@ -1,0 +1,71 @@
+expression = input("Введіть вираз: ")
+
+def calculate(expression):
+    numbers = []
+    operations = []
+    number = ""
+    i = 0
+
+    while i < len(expression):
+        char = expression[i]
+        if char == " ":
+            i += 1
+            continue
+        if char.isdigit() or char == ".":
+            number += char
+        else:
+            if number != "":
+                numbers.append(float(number))
+                number = ""
+            if char == "(":
+                operations.append(char)
+            elif char == ")":
+                while operations[-1] != "(":
+                    b = numbers.pop()
+                    a = numbers.pop()
+                    op = operations.pop()
+                    if op == "+":
+                        numbers.append(a + b)
+                    elif op == "-":
+                        numbers.append(a - b)
+                    elif op == "*":
+                        numbers.append(a * b)
+                    elif op == "/":
+                        numbers.append(a / b)
+                operations.pop()
+            else:
+                while len(operations) > 0 and operations[-1] != "(" and (
+                    operations[-1] == "*" or operations[-1] == "/" or
+                    char == "+" or char == "-"
+                ):
+                    b = numbers.pop()
+                    a = numbers.pop()
+                    op = operations.pop()
+                    if op == "+":
+                        numbers.append(a + b)
+                    elif op == "-":
+                        numbers.append(a - b)
+                    elif op == "*":
+                        numbers.append(a * b)
+                    elif op == "/":
+                        numbers.append(a / b)
+                operations.append(char)
+        i += 1
+
+    if number != "":
+        numbers.append(float(number))
+    while len(operations) > 0:
+        b = numbers.pop()
+        a = numbers.pop()
+        op = operations.pop()
+
+        if op == "+":
+            numbers.append(a + b)
+        elif op == "-":
+            numbers.append(a - b)
+        elif op == "*":
+            numbers.append(a * b)
+        elif op == "/":
+            numbers.append(a / b)
+    return numbers[0]
+print(calculate(expression))
